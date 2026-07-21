@@ -25,7 +25,6 @@ val gprUser = firstNonBlank(
     System.getenv("GITHUB_ACTOR"),
     githubOwner,
 )
-// GH_PACKAGES_TOKEN vacío (secret faltante) NO debe tapar a GITHUB_TOKEN
 val gprToken = firstNonBlank(
     providers.gradleProperty("gpr.token").orNull,
     System.getenv("GH_PACKAGES_TOKEN"),
@@ -37,7 +36,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        mavenLocal()
+        // GitHub Packages primero: Sync/Run en Android Studio toma lo publicado por CI
         maven {
             name = "GitHubPackagesMiniJuegosSdk"
             url = uri("https://maven.pkg.github.com/$githubOwner/MiniJuegosSdk")
@@ -54,6 +53,8 @@ dependencyResolutionManagement {
                 password = gprToken
             }
         }
+        // Solo fallback offline / pruebas con publishToMavenLocal
+        mavenLocal()
     }
 }
 
