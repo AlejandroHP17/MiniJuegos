@@ -18,6 +18,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Verify GH_PACKAGES_TOKEN
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+        run: |
+          if [ -z "$GH_PACKAGES_TOKEN" ]; then
+            echo "::error::Falta el secret GH_PACKAGES_TOKEN. Crea un PAT (classic) con read:packages y configúralo en Settings → Secrets → Actions."
+            exit 1
+          fi
+          echo "GH_PACKAGES_TOKEN presente (${#GH_PACKAGES_TOKEN} chars)."
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -34,7 +44,5 @@ jobs:
       - name: Build debug APK
         env:
           GITHUB_ACTOR: ${{ github.actor }}
-          # PAT con read:packages para SDK + Buscaminas
           GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew :app:assembleDebug --no-daemon --refresh-dependencies
