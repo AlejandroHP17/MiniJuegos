@@ -53,6 +53,14 @@ dependencyResolutionManagement {
                 password = gprToken
             }
         }
+        maven {
+            name = "GitHubPackagesFindOut"
+            url = uri("https://maven.pkg.github.com/$githubOwner/findout")
+            credentials {
+                username = gprUser
+                password = gprToken
+            }
+        }
         // Solo fallback offline / pruebas con publishToMavenLocal
         mavenLocal()
     }
