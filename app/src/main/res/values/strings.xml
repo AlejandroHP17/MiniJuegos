@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">MiniJuegos</string>
-    <string name="hub_subtitle">Elige un juego para empezar</string>
+    <string name="hub_tagline">Tu colección de partidas rápidas</string>
+    <string name="hub_subtitle">Elige un juego y empieza en un toque</string>
+    <string name="hub_games_section">Juegos</string>
+    <string name="hub_open_game">Abrir %1$s</string>
+    <string name="hub_play">Jugar</string>
 </resources>

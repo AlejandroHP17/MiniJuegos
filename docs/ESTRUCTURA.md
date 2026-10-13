@@ -6,11 +6,13 @@
 flowchart TB
   user[Usuario]
   hub[GamesHubScreen]
+  visuals[GameVisuals iconos vectoriales]
   catalog[GameCatalog]
   entry[game.Entry]
   aars[AARs sdk + buscaminas + findout + flappybird]
 
   user --> hub
+  hub --> visuals
   hub --> catalog
   catalog --> entry
   entry --> aars
@@ -18,12 +20,13 @@ flowchart TB
 
 MiniJuegos solo se ocupa de:
 
-1. Hub / catálogo  
-2. Navegación a `GameModule.Entry`  
-3. Tema de marca  
-4. Declarar dependencias Maven  
+1. Hub / catálogo con UX propia  
+2. Iconos vectoriales por `game.id` (`GameVisuals` + `res/drawable/ic_game_*`)  
+3. Navegación a `GameModule.Entry`  
+4. Tema de marca  
+5. Declarar dependencias Maven  
 
-La lógica de cada juego **no** está en este repo.
+La lógica de cada juego **no** está en este repo. Los iconos del menú viven en el host para no engordar el contrato SDK.
 
 ## Árbol del proyecto
 
@@ -31,17 +34,22 @@ La lógica de cada juego **no** está en este repo.
 MiniJuegos/
 ├── .github/workflows/ci.yml
 ├── app/
-│   └── src/main/java/pelkidev/com/mx/minijuegos/
-│       ├── MainActivity.kt          # Hub ↔ Entry
-│       ├── GameCatalog.kt           # Lista de GameModule
-│       ├── presentation/
-│       │   └── GamesHubScreen.kt
-│       └── ui/theme/
-├── settings.gradle.kts              # Repos GitHub Packages (SDK + cada juego)
-├── build.gradle.kts                 # Sin caché de SNAPSHOT
+│   └── src/main/
+│       ├── java/…/minijuegos/
+│       │   ├── MainActivity.kt
+│       │   ├── GameCatalog.kt
+│       │   ├── presentation/
+│       │   │   ├── GamesHubScreen.kt
+│       │   │   └── GameVisuals.kt
+│       │   └── ui/theme/
+│       └── res/drawable/
+│           ├── ic_hub_mark.xml
+│           ├── ic_game_buscaminas.xml
+│           ├── ic_game_findout.xml
+│           ├── ic_game_flappybird.xml
+│           └── ic_game_default.xml
+├── settings.gradle.kts
 └── docs/
-    ├── ESTRUCTURA.md
-    └── TUTORIAL.md
 ```
 
 ## Navegación host
@@ -53,75 +61,17 @@ stateDiagram-v2
   Juego --> Hub: onExit
 ```
 
-Implementación actual (sin Navigation Compose): estado `selectedGameId` en `MainActivity`.
-
-```mermaid
-sequenceDiagram
-  participant User
-  participant Main as MainActivity
-  participant Hub as GamesHubScreen
-  participant Game as GameModule
-
-  User->>Main: abre app
-  Main->>Hub: games = GameCatalog.games
-  User->>Hub: tap un juego
-  Hub->>Main: onGameSelected
-  Main->>Game: Entry onExit
-  User->>Game: jugar / salir
-  Game->>Main: onExit
-  Main->>Hub: selectedGameId = null
-```
-
 ## Resolución de dependencias
 
-```mermaid
-flowchart LR
-  studio[Android_Studio_Sync]
-  gprSdk[Packages MiniJuegosSdk]
-  gprBus[Packages Buscaminas]
-  gprFind[Packages findout]
-  gprFlap[Packages FlappyBird]
-  local[mavenLocal fallback]
+Orden en `settings.gradle.kts`: Google/Maven Central → Packages (SDK + cada juego) → `mavenLocal()`.
 
-  studio --> gprSdk
-  studio --> gprBus
-  studio --> gprFind
-  studio --> gprFlap
-  studio -.-> local
-```
+## Catálogo + visuals
 
-Orden en `settings.gradle.kts`:
+Para un juego nuevo:
 
-1. Google / Maven Central  
-2. GitHub Packages (SDK)  
-3. GitHub Packages (Buscaminas, findout, FlappyBird)  
-4. `mavenLocal()` (fallback)
-
-`cacheChangingModulesFor(0)` hace que cada sync pida de nuevo los SNAPSHOT.
-
-## Catálogo
-
-```mermaid
-classDiagram
-  class GameCatalog {
-    +games: List~GameModule~
-  }
-  class GameModule {
-    <<interface>>
-  }
-  class BuscaminasGameModule
-  class FindOutGameModule
-  class FlappyBirdGameModule
-  GameCatalog --> GameModule
-  BuscaminasGameModule ..|> GameModule
-  FindOutGameModule ..|> GameModule
-  FlappyBirdGameModule ..|> GameModule
-  GameCatalog --> BuscaminasGameModule
-  GameCatalog --> FindOutGameModule
-  GameCatalog --> FlappyBirdGameModule
-```
-
-Para un juego nuevo: dependencia Maven + una línea en `GameCatalog.games`.
+1. Dependencia Maven + línea en `GameCatalog.games`  
+2. Vector drawable `ic_game_<id>.xml`  
+3. Entrada en `GameVisuals.forId`
 
 ## Qué no vive aquí
 

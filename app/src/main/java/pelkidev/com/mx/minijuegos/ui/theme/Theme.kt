@@ -1,58 +1,55 @@
 package pelkidev.com.mx.minijuegos.ui.theme
 
-import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
+private val TealContainer = Color(0xFFB8E0D2)
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = TealDeep,
+    onPrimary = Cream,
+    primaryContainer = TealContainer,
+    onPrimaryContainer = Ink,
+    secondary = Coral,
+    onSecondary = Cream,
+    secondaryContainer = Amber.copy(alpha = 0.35f),
+    onSecondaryContainer = Ink,
+    tertiary = TealSoft,
+    background = Sand,
+    onBackground = Ink,
+    surface = Cream,
+    onSurface = Ink,
+    surfaceVariant = SandDark,
+    onSurfaceVariant = InkMuted,
+    outline = InkMuted.copy(alpha = 0.35f),
+)
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+private val DarkColorScheme = darkColorScheme(
+    primary = TealSoft,
+    onPrimary = Ink,
+    secondary = Amber,
+    onSecondary = Ink,
+    tertiary = Coral,
+    background = Color(0xFF122022),
+    onBackground = Cream,
+    surface = Color(0xFF1A2C2E),
+    onSurface = Cream,
+    surfaceVariant = Color(0xFF243A3C),
+    onSurfaceVariant = SandDark,
 )
 
 @Composable
 fun MiniJuegosTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme,
         typography = Typography,
-        content = content
+        content = content,
     )
 }

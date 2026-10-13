@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#DCEAF7"
+        android:pathData="M18,18h72v72h-72z" />
+    <path
+        android:fillColor="#7BB3D9"
+        android:pathData="M18,62c12,-14 24,-10 36,-2c10,7 22,8 36,-6v36h-72z" />
+    <path
+        android:fillColor="#F4D35E"
+        android:pathData="M78,34a8,8 0 1,1 -16,0a8,8 0 1,1 16,0" />
+    <!-- Magnifier ring (outer - inner) -->
+    <path
+        android:fillColor="#1B4F72"
+        android:pathData="M46,30c-8.8,0 -16,7.2 -16,16s7.2,16 16,16s16,-7.2 16,-16s-7.2,-16 -16,-16zM46,36c5.5,0 10,4.5 10,10s-4.5,10 -10,10s-10,-4.5 -10,-10s4.5,-10 10,-10z" />
+    <path
+        android:fillColor="#1B4F72"
+        android:pathData="M58,62 L74,80 L80,75 L63,57 Z" />
+</vector>

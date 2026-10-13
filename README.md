@@ -16,8 +16,12 @@ Los juegos **no** viven en este repo: se desarrollan aparte, se publican a GitHu
 
 ## Documentación
 
-- [Estructura del proyecto](docs/ESTRUCTURA.md)
+- [Estructura del proyecto](docs/ESTRUCTURA.md) — hub, `GameVisuals` e iconos vectoriales
 - [Tutorial del sistema completo](docs/TUTORIAL.md) — paso a paso de cómo funciona todo junto
+
+## UX del hub
+
+El menú principal usa marca teal/coral, tarjetas por juego e **iconos vectoriales** (`ic_game_*`) mapeados por `GameModule.id` en `GameVisuals` (sin cambiar el SDK).
 
 ## Dependencias Maven
 

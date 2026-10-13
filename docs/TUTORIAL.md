@@ -258,9 +258,10 @@ Supón un juego nuevo `TresEnRaya` en su propio repo.
 5. En **MiniJuegos** `settings.gradle.kts`: maven repo del nuevo GitHub Packages.  
 6. En `app/build.gradle.kts`: `implementation("…:tresenraya:1.0.0-SNAPSHOT")`.  
 7. En `GameCatalog`: `listOf(BuscaminasGameModule, TresEnRayaGameModule)`.  
-8. Sync + Run.
+8. Añadir `ic_game_tresenraya.xml` y una rama en `GameVisuals.forId("tresenraya")`.  
+9. Sync + Run.
 
-El hub no necesita conocer pantallas internas del nuevo juego.
+El hub no necesita conocer pantallas internas del nuevo juego; sí puede (y debe) tener icono/CTA propios.
 
 ---
 
