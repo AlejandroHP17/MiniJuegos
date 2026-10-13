@@ -12,34 +12,37 @@ Público objetivo: alguien que abre los tres proyectos por primera vez y quiere 
 
 ---
 
-## 2. Los tres repositorios
+## 2. Los repositorios
 
 ```mermaid
 flowchart TB
   subgraph sdkRepo [1_MiniJuegosSdk]
     GM[GameModule interface]
   end
-  subgraph gameRepo [2_Buscaminas]
-    LIB[library :buscaminas]
-    SHELL[app shell]
-    SHELL --> LIB
-    LIB --> GM
+  subgraph games [Juegos AAR]
+    BUS[:buscaminas]
+    FIND[:findout]
+    FLAP[:flappybird]
   end
-  subgraph hostRepo [3_MiniJuegos]
+  subgraph hostRepo [MiniJuegos]
     APP[app host + hub]
     APP --> GM
-    APP --> LIB
+    APP --> BUS
+    APP --> FIND
+    APP --> FLAP
   end
   sdkRepo -->|publica sdk AAR| GPR[(GitHub Packages)]
-  gameRepo -->|publica buscaminas AAR| GPR
+  games -->|publican AARs| GPR
   GPR -->|resolve Maven| hostRepo
 ```
 
-| # | Repo | Pregunta que responde |
-|---|------|------------------------|
-| 1 | [MiniJuegosSdk](https://github.com/AlejandroHP17/MiniJuegosSdk) | ¿Cómo se “enchufa” un juego al host sin conocer su código interno? |
-| 2 | [Buscaminas](https://github.com/AlejandroHP17/Buscaminas) | ¿Dónde vive el juego y cómo se prueba solo? |
-| 3 | [MiniJuegos](https://github.com/AlejandroHP17/MiniJuegos) | ¿Dónde está el menú y la APK que el usuario instala? |
+| Repo | Pregunta que responde |
+|------|------------------------|
+| [MiniJuegosSdk](https://github.com/AlejandroHP17/MiniJuegosSdk) | ¿Cómo se “enchufa” un juego al host sin conocer su código interno? |
+| [Buscaminas](https://github.com/AlejandroHP17/Buscaminas) | Plantilla canónica AAR / Compose |
+| [findout](https://github.com/AlejandroHP17/findout) | Ejemplo Godot → Compose (hotspots) |
+| [FlappyBird](https://github.com/AlejandroHP17/FlappyBird) | Ejemplo Godot → Compose Canvas |
+| [MiniJuegos](https://github.com/AlejandroHP17/MiniJuegos) | ¿Dónde está el menú y la APK que el usuario instala? |
 
 ---
 
@@ -47,8 +50,8 @@ flowchart TB
 
 1. **Independencia:** puedes abrir Buscaminas en Android Studio, instalar su APK shell y probar sin compilar el host.  
 2. **Límites claros:** el host no se ensucia con el motor del tablero.  
-3. **Escala:** un segundo juego = otro repo + una línea en `GameCatalog`, no un monorepo gigante.  
-4. **Versionado:** publicas `buscaminas:1.0.0-SNAPSHOT` sin liberar un APK nuevo del SDK.
+3. **Escala:** un juego más = otro repo + una línea en `GameCatalog`, no un monorepo gigante.  
+4. **Versionado:** publicas `flappybird:1.0.0-SNAPSHOT` (u otro AAR) sin liberar un APK nuevo del SDK.
 
 El coste es el pipeline Maven (CI + credenciales). Ese es el “pegamento”.
 
@@ -159,11 +162,11 @@ sequenceDiagram
 
 | Archivo | Responsabilidad |
 |---------|-----------------|
-| `GameCatalog.kt` | `listOf(BuscaminasGameModule, …)` |
+| `GameCatalog.kt` | `listOf(Buscaminas…, FindOut…, FlappyBird…)` |
 | `GamesHubScreen.kt` | UI del menú |
 | `MainActivity.kt` | Alterna hub ↔ `Entry` |
-| `settings.gradle.kts` | Dónde bajar los AAR (GitHub Packages) |
-| `app/build.gradle.kts` | `implementation("…:buscaminas:…")` |
+| `settings.gradle.kts` | Dónde bajar los AAR (GitHub Packages por juego) |
+| `app/build.gradle.kts` | `implementation` de cada artefacto |
 
 ---
 
@@ -184,7 +187,9 @@ flowchart LR
 | Artefacto | URL del registry |
 |-----------|------------------|
 | `…:sdk:1.0.0` | `maven.pkg.github.com/AlejandroHP17/MiniJuegosSdk` |
-| `…:buscaminas:1.0.0-SNAPSHOT` | `maven.pkg.github.com/AlejandroHP17/Buscaminas` |
+| `…:buscaminas:1.0.1` | `maven.pkg.github.com/AlejandroHP17/Buscaminas` |
+| `…:findout:1.0.0-SNAPSHOT` | `maven.pkg.github.com/AlejandroHP17/findout` |
+| `…:flappybird:1.0.0-SNAPSHOT` | `maven.pkg.github.com/AlejandroHP17/FlappyBird` |
 
 ### Autenticación
 
@@ -208,7 +213,7 @@ Sin eso verás `401 Unauthorized` al sincronizar.
 
 1. Crea un PAT classic con `read:packages` (y `write:packages` si publicas a mano).  
 2. Añádelo a `~/.gradle/gradle.properties` como arriba.  
-3. En GitHub, el mismo PAT (o uno equivalente) como secret `GH_PACKAGES_TOKEN` en Buscaminas y MiniJuegos.
+3. En GitHub, el mismo PAT (o uno equivalente) como secret `GH_PACKAGES_TOKEN` en MiniJuegos y en **cada** repo de juego que publique.
 
 ### Paso 2 — Verificar que el SDK está publicado
 
@@ -226,9 +231,9 @@ Si no hay package: push vacío o *Re-run* del workflow del SDK.
 
 ### Paso 4 — Abrir MiniJuegos en Android Studio
 
-1. Sync Project (debe resolver `sdk` y `buscaminas` desde Packages).  
+1. Sync Project (debe resolver `sdk` + AARs de juegos desde Packages).  
 2. Run en emulador/dispositivo.  
-3. Debes ver el hub → tap Buscaminas → juego → atrás vuelve al hub.
+3. Debes ver el hub con varios juegos → tap uno → jugar → atrás vuelve al hub.
 
 ### Paso 5 — Hacer un cambio y verlo en el host
 

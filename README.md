@@ -1,6 +1,6 @@
 # MiniJuegos
 
-App host que lista y ejecuta minijuegos embebidos como AAR (primer juego: [Buscaminas](https://github.com/AlejandroHP17/Buscaminas)).
+App host que lista y ejecuta minijuegos embebidos como AAR.
 
 Los juegos **no** viven en este repo: se desarrollan aparte, se publican a GitHub Packages y aquí solo se consumen + se registran en el catálogo.
 
@@ -9,7 +9,9 @@ Los juegos **no** viven en este repo: se desarrollan aparte, se publican a GitHu
 | Repo | Rol |
 |------|-----|
 | [MiniJuegosSdk](https://github.com/AlejandroHP17/MiniJuegosSdk) | Contrato `GameModule` |
-| [Buscaminas](https://github.com/AlejandroHP17/Buscaminas) | Primer juego (AAR) |
+| [Buscaminas](https://github.com/AlejandroHP17/Buscaminas) | Juego AAR (plantilla) |
+| [findout](https://github.com/AlejandroHP17/findout) | Find Out AAR |
+| [FlappyBird](https://github.com/AlejandroHP17/FlappyBird) | Flappy Bird AAR |
 | [MiniJuegos](https://github.com/AlejandroHP17/MiniJuegos) | Host (este proyecto) |
 
 ## Documentación
@@ -21,14 +23,20 @@ Los juegos **no** viven en este repo: se desarrollan aparte, se publican a GitHu
 
 ```kotlin
 implementation("pelkidev.com.mx.minijuegos:sdk:1.0.0")
-implementation("pelkidev.com.mx.minijuegos:buscaminas:1.0.0-SNAPSHOT")
+implementation("pelkidev.com.mx.minijuegos:buscaminas:1.0.1")
+implementation("pelkidev.com.mx.minijuegos:findout:1.0.0-SNAPSHOT")
+implementation("pelkidev.com.mx.minijuegos:flappybird:1.0.0-SNAPSHOT")
 ```
 
 Registro en código:
 
 ```kotlin
 object GameCatalog {
-    val games = listOf(BuscaminasGameModule)
+    val games = listOf(
+        BuscaminasGameModule,
+        FindOutGameModule,
+        FlappyBirdGameModule,
+    )
 }
 ```
 
@@ -41,7 +49,7 @@ gpr.user=AlejandroHP17
 gpr.token=ghp_xxx   # PAT classic con read:packages
 ```
 
-Luego **Sync Project**. Cada sync reconsulta el SNAPSHOT de Buscaminas publicado por CI.
+Luego **Sync Project**. Cada sync reconsulta los SNAPSHOT publicados por CI.
 
 ## Build
 
@@ -55,7 +63,7 @@ Push / `workflow_dispatch` en `main` → `assembleDebug` resolviendo packages re
 
 ## Flujo diario
 
-1. Cambias Buscaminas → push → CI publica AAR  
+1. Cambias un juego → push → CI publica AAR  
 2. En MiniJuegos (Android Studio) → Sync / Run → ves el cambio  
 
-No hace falta `publishToMavenLocal` si usas GitHub Packages (sí sirve para prototipar sin esperar CI).
+`publishToMavenLocal` sirve para prototipar sin esperar CI (`mavenLocal()` es fallback en `settings.gradle.kts`).

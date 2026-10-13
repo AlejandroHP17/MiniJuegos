@@ -8,12 +8,12 @@ flowchart TB
   hub[GamesHubScreen]
   catalog[GameCatalog]
   entry[game.Entry]
-  aar[AARs sdk + buscaminas]
+  aars[AARs sdk + buscaminas + findout + flappybird]
 
   user --> hub
   hub --> catalog
   catalog --> entry
-  entry --> aar
+  entry --> aars
 ```
 
 MiniJuegos solo se ocupa de:
@@ -23,7 +23,7 @@ MiniJuegos solo se ocupa de:
 3. Tema de marca  
 4. Declarar dependencias Maven  
 
-La lógica del buscaminas **no** está en este repo.
+La lógica de cada juego **no** está en este repo.
 
 ## Árbol del proyecto
 
@@ -37,7 +37,7 @@ MiniJuegos/
 │       ├── presentation/
 │       │   └── GamesHubScreen.kt
 │       └── ui/theme/
-├── settings.gradle.kts              # Repos GitHub Packages
+├── settings.gradle.kts              # Repos GitHub Packages (SDK + cada juego)
 ├── build.gradle.kts                 # Sin caché de SNAPSHOT
 └── docs/
     ├── ESTRUCTURA.md
@@ -60,11 +60,11 @@ sequenceDiagram
   participant User
   participant Main as MainActivity
   participant Hub as GamesHubScreen
-  participant Game as BuscaminasGameModule
+  participant Game as GameModule
 
   User->>Main: abre app
   Main->>Hub: games = GameCatalog.games
-  User->>Hub: tap Buscaminas
+  User->>Hub: tap un juego
   Hub->>Main: onGameSelected
   Main->>Game: Entry onExit
   User->>Game: jugar / salir
@@ -78,11 +78,15 @@ sequenceDiagram
 flowchart LR
   studio[Android_Studio_Sync]
   gprSdk[Packages MiniJuegosSdk]
-  gprGame[Packages Buscaminas]
+  gprBus[Packages Buscaminas]
+  gprFind[Packages findout]
+  gprFlap[Packages FlappyBird]
   local[mavenLocal fallback]
 
   studio --> gprSdk
-  studio --> gprGame
+  studio --> gprBus
+  studio --> gprFind
+  studio --> gprFlap
   studio -.-> local
 ```
 
@@ -90,10 +94,10 @@ Orden en `settings.gradle.kts`:
 
 1. Google / Maven Central  
 2. GitHub Packages (SDK)  
-3. GitHub Packages (Buscaminas)  
+3. GitHub Packages (Buscaminas, findout, FlappyBird)  
 4. `mavenLocal()` (fallback)
 
-`cacheChangingModulesFor(0)` hace que cada sync pida de nuevo `1.0.0-SNAPSHOT`.
+`cacheChangingModulesFor(0)` hace que cada sync pida de nuevo los SNAPSHOT.
 
 ## Catálogo
 
@@ -106,9 +110,15 @@ classDiagram
     <<interface>>
   }
   class BuscaminasGameModule
+  class FindOutGameModule
+  class FlappyBirdGameModule
   GameCatalog --> GameModule
   BuscaminasGameModule ..|> GameModule
-  GameCatalog --> BuscaminasGameModule : listOf
+  FindOutGameModule ..|> GameModule
+  FlappyBirdGameModule ..|> GameModule
+  GameCatalog --> BuscaminasGameModule
+  GameCatalog --> FindOutGameModule
+  GameCatalog --> FlappyBirdGameModule
 ```
 
 Para un juego nuevo: dependencia Maven + una línea en `GameCatalog.games`.
