@@ -61,6 +61,14 @@ dependencyResolutionManagement {
                 password = gprToken
             }
         }
+        maven {
+            name = "GitHubPackagesFlappyBird"
+            url = uri("https://maven.pkg.github.com/$githubOwner/FlappyBird")
+            credentials {
+                username = gprUser
+                password = gprToken
+            }
+        }
         // Solo fallback offline / pruebas con publishToMavenLocal
         mavenLocal()
     }
