@@ -35,6 +35,11 @@ object GameVisuals {
             accent = FlappyAccent,
             cta = "Despegar",
         )
+        "emuladorgba" -> GameVisual(
+            iconRes = R.drawable.ic_game_emuladorgba,
+            accent = Color(0xFF5B4B8A),
+            cta = "Elegir .gba",
+        )
         else -> GameVisual(
             iconRes = R.drawable.ic_game_default,
             accent = TealDeep,
