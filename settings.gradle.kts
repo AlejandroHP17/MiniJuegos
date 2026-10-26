@@ -69,6 +69,14 @@ dependencyResolutionManagement {
                 password = gprToken
             }
         }
+        maven {
+            name = "GitHubPackagesEmuladorGba"
+            url = uri("https://maven.pkg.github.com/$githubOwner/EmuladorGba")
+            credentials {
+                username = gprUser
+                password = gprToken
+            }
+        }
         // Solo fallback offline / pruebas con publishToMavenLocal
         mavenLocal()
     }
