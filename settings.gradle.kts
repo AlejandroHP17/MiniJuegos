@@ -77,6 +77,14 @@ dependencyResolutionManagement {
                 password = gprToken
             }
         }
+        maven {
+            name = "GitHubPackagesEmuladorNds"
+            url = uri("https://maven.pkg.github.com/$githubOwner/EmuladorNds")
+            credentials {
+                username = gprUser
+                password = gprToken
+            }
+        }
         // Solo fallback offline / pruebas con publishToMavenLocal
         mavenLocal()
     }
