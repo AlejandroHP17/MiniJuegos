@@ -1,6 +1,7 @@
 package pelkidev.com.mx.minijuegos
 
 import pelkidev.com.mx.buscaminas.BuscaminasGameModule
+import pelkidev.com.mx.emuladornds.EmuladorNdsGameModule
 import pelkidev.com.mx.emuladorgba.EmuladorGbaGameModule
 import pelkidev.com.mx.findout.FindOutGameModule
 import pelkidev.com.mx.flappybird.FlappyBirdGameModule
@@ -12,5 +13,6 @@ object GameCatalog {
         FindOutGameModule,
         FlappyBirdGameModule,
         EmuladorGbaGameModule,
+        EmuladorNdsGameModule,
     )
 }
