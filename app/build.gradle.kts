@@ -6,9 +6,7 @@ plugins {
 android {
     namespace = "pelkidev.com.mx.minijuegos"
     compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
+        version = release(37)
     }
 
     defaultConfig {
@@ -45,6 +43,7 @@ dependencies {
     implementation("pelkidev.com.mx.minijuegos:findout:1.0.0-SNAPSHOT")
     implementation("pelkidev.com.mx.minijuegos:flappybird:1.0.0-SNAPSHOT")
     implementation("pelkidev.com.mx.minijuegos:emuladorgba:1.0.0-SNAPSHOT")
+    implementation("pelkidev.com.mx.minijuegos:emuladornds:1.0.0-SNAPSHOT")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
