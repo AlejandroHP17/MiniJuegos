@@ -32,4 +32,4 @@ La foto de un juego ya hecho, sin épicas, vive en `docs/incrementos/<repo>/AS-I
 | EmuladorNds | Partida conservada al instalar | cerrada | [epica.md](EmuladorNds/E08-partida-conservada/epica.md) |
 | EmuladorNds | Partida más fluida | abierta | [epica.md](EmuladorNds/E09-rendimiento/epica.md) |
 | EmuladorNds | Quitar encuentro y experiencia ×10 | cerrada | [epica.md](EmuladorNds/E10-quitar-trucos/epica.md) |
-| MiniJuegos | Juegos de Rooms listos en el emulador | cerrada | [epica.md](MiniJuegos/E01-rooms-al-instalar/epica.md) |
+| MiniJuegos | Juegos de Rooms listos en el emulador | descartada | [epica.md](MiniJuegos/E01-rooms-al-instalar/epica.md) |
